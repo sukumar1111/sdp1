@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Classifier</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container text-center mt-5">
+        <h1 class="mb-4">🌿 AI Image Classifier 🌿</h1>
+
+        <div class="card p-4 shadow-lg">
+            <h3>Select an Image</h3>
+            
+            <!-- Buttons for Camera and Upload -->
+            <button class="btn btn-success mb-3" onclick="openCamera()">📷 Use Camera</button>
+            <button class="btn btn-primary mb-3" onclick="openFilePicker()">📁 Upload Image</button>
+
+            <!-- Hidden File Input -->
+            <form id="uploadForm" action="/" method="post" enctype="multipart/form-data">
+                <input id="fileInput" class="form-control mb-3 d-none" type="file" name="file" accept="image/*" capture="environment" required>
+                <button type="submit" class="btn btn-primary btn-lg">Upload & Classify</button>
+            </form>
+
+            <!-- Camera Preview -->
+            <video id="cameraView" class="mt-3 d-none" autoplay></video>
+            <canvas id="canvas" class="d-none"></canvas>
+            <button id="captureButton" class="btn btn-danger mt-2 d-none" onclick="captureImage()">Capture</button>
+        </div>
+
+        {% if filename %}
+        <div class="result mt-5">
+            <h3>Uploaded Image:</h3>
+            <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded Image" class="img-fluid mt-3 rounded shadow">
+            <h2 class="mt-4 text-success">Prediction: {{ prediction }}</h2>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function openFilePicker() {
+            document.getElementById('fileInput').click();
+        }
+
+        function openCamera() {
+            let video = document.getElementById('cameraView');
+            let captureBtn = document.getElementById('captureButton');
+            video.classList.remove('d-none');
+            captureBtn.classList.remove('d-none');
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(err => console.error("Camera access denied!", err));
+        }
+
+        function captureImage() {
+            let video = document.getElementById('cameraView');
+            let canvas = document.getElementById('canvas');
+            let context = canvas.getContext('2d');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(blob => {
+                let file = new File([blob], "captured_image.png", { type: "image/png" });
+                let dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                document.getElementById('fileInput').files = dataTransfer.files;
+
+                document.getElementById('uploadForm').submit();
+            });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
