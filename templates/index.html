@@ -16,12 +16,19 @@
     </script>
     <style>
         body {
-            background: linear-gradient(to right, #ff9966, #ff5e62);
-            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: url("../static/img1.jpg") no-repeat center center fixed;
+            background-size: cover;
+            background-attachment: fixed;
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         .card {
             animation: fadeIn 0.8s ease-in-out;
@@ -56,6 +63,7 @@
             <div class="d-flex flex-column gap-2">
                 <button class="btn btn-success" onclick="openCamera()">📷 Use Camera</button>
                 <button class="btn btn-primary" onclick="openFilePicker()">📁 Upload Image</button>
+                <a href="https://chatbot-1-o28j.onrender.com/" class="btn btn-info mt-2">💬 Chat with Bot</a>
             </div>
             
             <form id="uploadForm" action="/" method="post" enctype="multipart/form-data" class="mt-3">
