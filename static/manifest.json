@@ -1,6 +1,6 @@
 {
-    "name": "Simple PWA",
-    "short_name": "PWA",
+    "name": "Farmer 🌿🌿🌿",
+    "short_name": "Farmer 🌿",
     "start_url": "/index.html",
     "display": "standalone",
     "background_color": "#ffffff",
